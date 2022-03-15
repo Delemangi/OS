@@ -1,8 +1,8 @@
-package lab1.zad4;
+package lab1.task4;
 
 import java.io.*;
 
-public class zad4 {
+public class task4 {
     public static void main(String[] args) throws FileNotFoundException {
         File folder = new File(args[0]);
 

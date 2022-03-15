@@ -1,4 +1,4 @@
-package lab1.zad2;
+package lab1.task2;
 
 import java.io.*;
 

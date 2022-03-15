@@ -1,12 +1,12 @@
-package lab1.zad6;
+package lab1.task6;
 
 import java.io.*;
 import java.util.stream.*;
 
-public class zad6 {
+public class task6 {
     public static void main(String[] args) throws IOException {
-        File input = new File("./src/lab1/zad6/izvor.txt");
-        File output = new File("./src/lab1/zad6/destinacija.txt");
+        File input = new File("./src/lab1/task6/izvor.txt");
+        File output = new File("./src/lab1/task6/destinacija.txt");
 
         if (!input.exists() || !output.exists()) {
             throw new FileNotFoundException();

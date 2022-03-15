@@ -1,8 +1,8 @@
-package lab1.zad5;
+package lab1.task5;
 
 import java.io.*;
 
-public class zad5 {
+public class task5 {
     public void writeToStdOutput(String inputFilePath) throws IOException {
         BufferedReader reader = null;
         BufferedWriter writer = null;

@@ -1,8 +1,8 @@
-package lab1.zad1;
+package lab1.task1;
 
 import java.io.*;
 
-public class zad1 {
+public class task1 {
     public boolean deleteFile(String filePath) throws FileNotFoundException {
         File f = new File(filePath);
 
