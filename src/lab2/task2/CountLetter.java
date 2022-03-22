@@ -6,20 +6,18 @@ import java.util.concurrent.*;
 
 public class CountLetter {
     private int count = 0;
-    private Semaphore lock;
+    private Semaphore semaphore;
 
     public void init() {
-        lock = new Semaphore(1);
+        semaphore = new Semaphore(1);
     }
 
     class Counter extends Thread {
         public void count(String data) throws InterruptedException {
-            for (char c : data.toCharArray()) {
-                if (c == 'A') {
-                    lock.acquire();
-                    count++;
-                    lock.release();
-                }
+            if (data.equals("A")) {
+                semaphore.acquire();
+                count++;
+                semaphore.release();
             }
         }
 

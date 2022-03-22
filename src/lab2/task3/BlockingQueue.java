@@ -1,27 +1,44 @@
 package lab2.task3;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.locks.*;
 
 public class BlockingQueue<T> {
-    private Semaphore sem;
-    private Queue<T> queue;
+    T[] contents;
+    int capacity;
+    Lock lock;
+    int count;
+    int head;
+    int tail;
 
-    public BlockingQueue() {
-        this.queue = new LinkedList<>();
-        this.sem = new Semaphore(1);
+    public BlockingQueue(int capacity) {
+        contents = (T[]) new Object[capacity];
+        this.capacity = capacity;
+        lock = new ReentrantLock();
+        count = head = tail = 0;
     }
 
-    public void enqueue(T item) throws InterruptedException {
-        sem.acquire();
-        queue.add(item);
-        sem.release();
+    public void enqueue(T item) {
+        lock.lock();
+
+        contents[tail] = item;
+        if (++tail == contents.length) {
+            tail = 0;
+        }
+        ++count;
+
+        lock.unlock();
     }
 
-    public T dequeue() throws InterruptedException {
-        sem.acquire();
-        T item = queue.remove();
-        sem.release();
+    public T dequeue() {
+        lock.lock();
+
+        T item = contents[head];
+        if (++head == contents.length) {
+            head = 0;
+        }
+        --count;
+
+        lock.unlock();
 
         return item;
     }
