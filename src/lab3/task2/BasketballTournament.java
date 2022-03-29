@@ -41,44 +41,57 @@ public class BasketballTournament {
 class Player extends Thread {
     static Semaphore playing = new Semaphore(20);
     static Semaphore dressing = new Semaphore(10);
-    static Lock playersLock = new ReentrantLock();
-    static Lock counterLock = new ReentrantLock();
-    static volatile int players = 0;
-    static int counter = 0;
+    static Semaphore game = new Semaphore(0);
+
+    static Lock dressedPlayersLock = new ReentrantLock();
+    static Lock donePlayersLock = new ReentrantLock();
+
+    static int dressedPlayers = 0;
+    static int donePlayers = 0;
 
     public void execute() throws InterruptedException {
         // at most 20 players should print this in parallel
-        Player.playing.acquire(1);
+        playing.acquire(1);
         System.out.println("Player inside.");
 
         // at most 10 players may enter the dressing room in parallel
-        Player.dressing.acquire(1);
+        dressing.acquire(1);
         System.out.println("In dressing room.");
         Thread.sleep(10); // this represents the dressing time
-        Player.dressing.release(1);
+        dressing.release(1);
 
-        playersLock.lock();
-        players++;
-        playersLock.unlock();
-        
-        while (players != 20) Thread.onSpinWait();
+        dressedPlayersLock.lock();
+        dressedPlayers++;
+        dressedPlayersLock.unlock();
+
+        dressedPlayersLock.lock();
+        if (dressedPlayers == 20) {
+            game.release(20);
+        }
+        dressedPlayersLock.unlock();
+
+        game.acquire(1);
 
         // after all players are ready, they should start with the game together
         System.out.println("Game started.");
         Thread.sleep(100); // this represents the game duration
         System.out.println("Player done.");
 
-        counterLock.lock();
-        counter++;
-        counterLock.unlock();
+        donePlayersLock.lock();
+        donePlayers++;
+        donePlayersLock.unlock();
 
         // only one player should print the next line, representing that the game has finished
-        if (counter == 20) {
+        donePlayersLock.lock();
+        if (donePlayers == 20) {
             System.out.println("Game finished.");
-            Player.playing.release(20);
-            counter = 0;
-            players = 0;
+
+            playing.release(20);
+
+            donePlayers = 0;
+            dressedPlayers = 0;
         }
+        donePlayersLock.unlock();
     }
 
     @Override

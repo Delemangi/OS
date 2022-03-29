@@ -9,6 +9,7 @@ public class Vinegar {
     static Semaphore hydrogen = new Semaphore(4);
     static Semaphore oxygen = new Semaphore(2);
     static Semaphore bonding = new Semaphore(0);
+
     static Lock lock = new ReentrantLock();
 
     static int counter = 0;
@@ -70,10 +71,12 @@ public class Vinegar {
             carbon.release(1);
 
             // only one atom should print the next line, representing that the molecule is created
+            lock.lock();
             if (counter == 8) {
                 counter = 0;
                 System.out.println("Molecule created.");
             }
+            lock.unlock();
         }
 
         @Override
@@ -110,10 +113,12 @@ public class Vinegar {
             hydrogen.release(1);
 
             // only one atom should print the next line, representing that the molecule is created
+            lock.lock();
             if (counter == 8) {
                 counter = 0;
                 System.out.println("Molecule created.");
             }
+            lock.unlock();
         }
 
         @Override
@@ -150,10 +155,12 @@ public class Vinegar {
             oxygen.release(1);
 
             // only one atom should print the next line, representing that the molecule is created
+            lock.lock();
             if (counter == 8) {
                 counter = 0;
                 System.out.println("Molecule created.");
             }
+            lock.unlock();
         }
 
         @Override

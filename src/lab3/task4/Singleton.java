@@ -15,8 +15,8 @@ public class Singleton {
         if (singleton == null) {
             singleton = new Singleton();
         }
-
         lock.unlock();
+
         return singleton;
     }
 
